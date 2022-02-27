@@ -6,6 +6,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const URL = process.env.MONGO_URI;
 const notFound = require('./middleware/not-found')
+const errorHandler = require('./middleware/error-handler')
 
 // Middleware
 app.use(express.static('./public'));
@@ -13,6 +14,7 @@ app.use(express.json());
 
 // Route
 app.use('/api/v1/tasks', tasks);
+app.use(errorHandler);  
 app.use(notFound);
 
 async function start() {
