@@ -26,15 +26,12 @@ async function getTask(req, res) {
     if (!task) {
       return res.status(404).json({ msg: `No task with id: ${taskID}` });
 
-    }
+    };
+
     res.status(200).json({ task });
   } catch (error) {
     res.status(500).json({ msg: error });
   }
-};
-
-function updateTask(req, res) {
-  res.send('update task');
 };
 
 async function deleteTask(req, res) {
@@ -44,7 +41,7 @@ async function deleteTask(req, res) {
 
     if (!task) {
       return res.status(404).json({ msg: `No task with id: ${taskID}` });
-    }
+    };
 
     res.status(200).json({ task });
   } catch (error) {
@@ -52,7 +49,30 @@ async function deleteTask(req, res) {
   }
 };
 
+async function updateTask(req, res) {
+  try {
+    const { id: taskID } = req.params;
+    const { name, completed } = req.body;
+    const update = {
+      name,
+      completed,
+    };
+    const option = {
+      new: true,
+      runValidators: true,
+    }
 
+    const task = await Task.findOneAndUpdate({ _id: taskID }, update, option);
+
+    if (!task) {
+      return res.status(404).json({ msg: `No task with id: ${taskID}` });
+    };
+
+    res.status(200).json({ taskID, name, completed });
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
+};
 
 module.exports = {
   getAllTasks,
